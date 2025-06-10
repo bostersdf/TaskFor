@@ -1,0 +1,19 @@
+{
+    "Task" : "Task",
+    "Forward" : "Forward",
+    "Date" : "Date",
+    "Edit task" : "Edit task",
+    "Name" : "Name",
+    "Description" : "Description",
+    "Sdat" : "Select date and time",
+    "Cancel" : "Cancel",
+    "Save" : "Save",
+    "Add a task" : "Add a task",
+    "Add" : "Add",
+    "Date/time selected" : "Date/time selected",
+    "settings": "Settings",
+    "language" : "Language",
+    "version" : "Version",
+    "infovers" : "Version information",
+    "welcome" : "WELCOME"
+}
