@@ -97,6 +97,7 @@ class ONETaskAppState extends State<ONETaskApp> {
   final newTask = await showAddTaskDialog(context);
   if (newTask != null) {
     setState(() {
+      
       tasks.add(newTask);
     });
   }
