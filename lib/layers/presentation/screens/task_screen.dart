@@ -93,7 +93,7 @@ class ONETaskAppState extends State<ONETaskApp> {
         FloatingActionButton(onPressed:_addTask, child : Icon(Icons.add)),
     );
 }
-  void _addTask() async { // Добавление новой задачи
+  void _addTask() async {
   final newTask = await showAddTaskDialog(context);
   if (newTask != null) {
     setState(() {
@@ -101,10 +101,10 @@ class ONETaskAppState extends State<ONETaskApp> {
     });
   }
 }
-  void _deleteTask(int index) { // Удаление задачи
+  void _deleteTask(int index) {
     setState(() => tasks.removeAt(index));
 }
-  void _editTask(int index) async { // Редактирование задачи
+  void _editTask(int index) async {
   Task task = tasks[index];
   final updatedTask = await showEditTaskDialog(context, task);
   if (updatedTask != null) {
