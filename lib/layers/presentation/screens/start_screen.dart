@@ -7,42 +7,50 @@ import 'package:google_fonts/google_fonts.dart';
 class ZEROStartClass extends StatefulWidget {
   const ZEROStartClass({super.key});
 
-@override
- State<ZEROStartClass> createState() => ZEROStartClassState();
+  @override
+  State<ZEROStartClass> createState() => ZEROStartClassState();
 }
 
 class ZEROStartClassState extends State<ZEROStartClass> {
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              context.tr('welcome'),
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
+      backgroundColor: const Color.fromARGB(255, 247, 247, 247),
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                context.tr('welcome'),
+                style: GoogleFonts.roboto(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                  color: const Color.fromARGB(255, 51, 51, 51),
+                ),
               ),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => context.go('/task'),
-              child: Text(
-              context.tr('Forward'),
-              style: GoogleFonts.roboto(
-              fontSize: 18,
-              color: Color.fromRGBO(58, 43, 43, 1),
-              fontWeight: FontWeight.w400,),
+              const SizedBox(height: 32),
+              OutlinedButton(
+                style: ButtonStyle(
+                  foregroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 51, 51, 51)),
+                  side: MaterialStateProperty.all(BorderSide(color: const Color.fromARGB(255, 51, 51, 51))),
+                  shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+                ),
+                onPressed: () => context.go('/task'),
+                child: Text(
+                  context.tr('Forward'),
+                  style: GoogleFonts.roboto(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
-      backgroundColor: const Color.fromARGB(255, 195, 214, 248),
     );
   }
 }

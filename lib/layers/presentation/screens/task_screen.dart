@@ -9,8 +9,14 @@ class Task {
   String title;
   String description;
   DateTime? dateTime;
+  bool isFavorite; // Это свойство "Избранное"
 
-  Task({required this.title, required this.description, this.dateTime});
+  Task({
+    required this.title,
+    required this.description,
+    this.dateTime,
+    this.isFavorite = false, // Эта строка обозначает,что по умолчанию НЕ избранное (То есть становится по нажатию кнопки)
+  });
 }
 
 class ONETaskApp extends StatefulWidget {
@@ -24,94 +30,123 @@ class ONETaskAppState extends State<ONETaskApp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:
-        Padding(
-          padding : EdgeInsets.only(top: 40, left: 20, right: 20, bottom: 40),
-          child:
-            Column(
-              children:[
-                Row(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(color: Color.fromRGBO(247, 247, 249, 1),
-                      borderRadius: BorderRadius.circular(100),
-                ),
-                      child: IconButton(
-                        onPressed: () => Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => TWOSettingsClass()),
-                        ),
-                        icon: Icon(CupertinoIcons.gear),
-                      ),
+      body: Padding(
+        padding: EdgeInsets.only(top: 40, left: 20, right: 20, bottom: 40),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: Color.fromRGBO(247, 247, 249, 1),
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                  child: IconButton(
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => TWOSettingsClass()),
                     ),
-                    Expanded(
-                      child: Center(
-                        child: Text(
-                          context.tr('Task'),
-                          style: TextStyle(fontSize: 20),
-                        ),
-                      ),
-                    ),
-                      SizedBox(width: 48),
-                  ],
+                    icon: Icon(CupertinoIcons.gear),
+                  ),
                 ),
                 Expanded(
-                  child:
-                    ListView.builder(
-                      itemCount : tasks.length,
-                      itemBuilder :(context,index){
-                        final t=tasks[index];
-                        return Card(
-                          margin : EdgeInsets.all(8),
-                          child : Padding(
-                            padding : EdgeInsets.all(8),
-                            child : Column(crossAxisAlignment : CrossAxisAlignment.start, children:[
-                              Row(mainAxisAlignment : MainAxisAlignment.spaceBetween, children:[
-                                Expanded(child : Text(t.title)),
-                                Row(children:[
-                                  IconButton(icon : Icon(Icons.edit),
-                                  color: Color.fromARGB(255, 42, 155, 184),
-                                  onPressed : ()=>_editTask(index)
-                                  ),
-                                  IconButton(icon : Icon(Icons.delete), 
-                                  color: Color.fromARGB(255, 184, 42, 42),
-                                  onPressed : ()=>_deleteTask(index)),
-                                ]),
-                              ]),
-                              if(t.dateTime != null)
-                                Text(context.tr('Date ${t.dateTime!.toLocal().toString().substring(0,16)}')),
-                              SizedBox(height :8),
-                              Text(t.description),
-                            ]),
-                          ),
-                        );
-                      }),
+                  child: Center(
+                    child: Text(
+                      context.tr('Task'),
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ),
                 ),
+                SizedBox(width: 48),
               ],
-            )
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: tasks.length,
+                itemBuilder: (context, index) {
+                  final t = tasks[index];
+                  return Card(
+                    margin: EdgeInsets.all(8),
+                    child: Padding(
+                      padding: EdgeInsets.all(8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(child: Text(t.title)),
+                              Row(
+                                children: [
+                                  // Кнопка "Избранное"
+                                  IconButton(
+                                    icon: Icon(t.isFavorite ? Icons.star : Icons.star_border),
+                                    color: t.isFavorite ? Colors.yellow : null,
+                                    onPressed: () => _toggleFavorite(index),
+                                  ),
+                                  IconButton(
+                                    icon: Icon(Icons.edit),
+                                    color: Color.fromARGB(255, 42, 155, 184),
+                                    onPressed: () => _editTask(index),
+                                  ),
+                                  IconButton(
+                                    icon: Icon(Icons.delete),
+                                    color: Color.fromARGB(255, 184, 42, 42),
+                                    onPressed: () => _deleteTask(index),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          
+                          if (t.dateTime != null)
+                            Text(context.tr('Date ${t.dateTime!.toLocal().toString().substring(0, 16)}')),
+                          SizedBox(height: 8),
+                          Text(t.description),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
         ),
-      floatingActionButton:
-        FloatingActionButton(onPressed:_addTask, child : Icon(Icons.add)),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _addTask,
+        child: Icon(Icons.add),
+      ),
     );
-}
-  void _addTask() async {
-  final newTask = await showAddTaskDialog(context);
-  if (newTask != null) {
-    setState(() {
-      
-      tasks.add(newTask);
-    });
   }
-}
+
+  void _addTask() async {
+    final newTask = await showAddTaskDialog(context);
+    if (newTask != null) {
+      setState(() {
+        tasks.add(newTask);
+      });
+    }
+  }
+
   void _deleteTask(int index) {
     setState(() => tasks.removeAt(index));
-}
-  void _editTask(int index) async {
-  Task task = tasks[index];
-  final updatedTask = await showEditTaskDialog(context, task);
-  if (updatedTask != null) {
-    setState(() {
-      tasks[index] = updatedTask;
-      });
   }
- }
+
+  void _editTask(int index) async {
+    Task task = tasks[index];
+    final updatedTask = await showEditTaskDialog(context, task);
+    if (updatedTask != null) {
+      setState(() {
+        tasks[index] = updatedTask;
+      });
+    }
+  }
+
+  // Переключение "Избранности" (Тумблер)
+  void _toggleFavorite(int index) {
+    setState(() {
+      tasks[index].isFavorite = !tasks[index].isFavorite;
+    });
+  }
 }
