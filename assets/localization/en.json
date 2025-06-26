@@ -1,6 +1,6 @@
 {
     "Task" : "Task",
-    "Forward" : "Forward",
+    "Forward" : "START",
     "Date" : "Date",
     "Edit task" : "Edit task",
     "Name" : "Name",
@@ -15,5 +15,5 @@
     "language" : "Language",
     "version" : "Version",
     "infovers" : "Version information",
-    "welcome" : "WELCOME"
+    "welcome" : "Welcome to TaskFor"
 }

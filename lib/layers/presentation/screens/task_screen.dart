@@ -11,8 +11,17 @@ class Task {
   String title;
   String description;
   DateTime? dateTime;
+  bool isFavorite; // Это свойство "Избранное"
 
+<<<<<<< HEAD
   Task({required this.title, required this.description, this.dateTime, 
+=======
+  Task({
+    required this.title,
+    required this.description,
+    this.dateTime,
+    this.isFavorite = false, // Эта строка обозначает,что по умолчанию НЕ избранное (То есть становится по нажатию кнопки)
+>>>>>>> 6a81fb845bab45cb7b8ec76cf768bb1db42d2db6
   });
 }
 
@@ -99,6 +108,7 @@ class ONETaskAppState extends State<ONETaskApp> {
                     margin: EdgeInsets.all(8),
                     child: Padding(
                       padding: EdgeInsets.all(8),
+<<<<<<< HEAD
                       child:
                           Column(crossAxisAlignment: CrossAxisAlignment.start, children:[
                         Row(mainAxisAlignment : MainAxisAlignment.spaceBetween, children:[
@@ -135,11 +145,90 @@ class ONETaskAppState extends State<ONETaskApp> {
 void _addTask() async {
   final newTask = await showAddTaskDialog(context);
   if (newTask != null) {
+=======
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(child: Text(t.title)),
+                              Row(
+                                children: [
+                                  // Кнопка "Избранное"
+                                  IconButton(
+                                    icon: Icon(t.isFavorite ? Icons.star : Icons.star_border),
+                                    color: t.isFavorite ? Colors.yellow : null,
+                                    onPressed: () => _toggleFavorite(index),
+                                  ),
+                                  IconButton(
+                                    icon: Icon(Icons.edit),
+                                    color: Color.fromARGB(255, 42, 155, 184),
+                                    onPressed: () => _editTask(index),
+                                  ),
+                                  IconButton(
+                                    icon: Icon(Icons.delete),
+                                    color: Color.fromARGB(255, 184, 42, 42),
+                                    onPressed: () => _deleteTask(index),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          
+                          if (t.dateTime != null)
+                            Text(context.tr('Date ${t.dateTime!.toLocal().toString().substring(0, 16)}')),
+                          SizedBox(height: 8),
+                          Text(t.description),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _addTask,
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+
+  void _addTask() async {
+    final newTask = await showAddTaskDialog(context);
+    if (newTask != null) {
+      setState(() {
+        tasks.add(newTask);
+      });
+    }
+  }
+
+  void _deleteTask(int index) {
+    setState(() => tasks.removeAt(index));
+  }
+
+  void _editTask(int index) async {
+    Task task = tasks[index];
+    final updatedTask = await showEditTaskDialog(context, task);
+    if (updatedTask != null) {
+      setState(() {
+        tasks[index] = updatedTask;
+      });
+    }
+  }
+
+  // Переключение "Избранности" (Тумблер)
+  void _toggleFavorite(int index) {
+>>>>>>> 6a81fb845bab45cb7b8ec76cf768bb1db42d2db6
     setState(() {
-      tasks.add(newTask);
+      tasks[index].isFavorite = !tasks[index].isFavorite;
     });
     await saveTasks();
   }
+<<<<<<< HEAD
 }
 
 void _deleteTask(int index) async {
@@ -158,3 +247,6 @@ void _editTask(int index) async {
  }
 }
 }
+=======
+}
+>>>>>>> 6a81fb845bab45cb7b8ec76cf768bb1db42d2db6
