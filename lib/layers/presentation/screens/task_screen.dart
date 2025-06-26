@@ -11,17 +11,13 @@ class Task {
   String title;
   String description;
   DateTime? dateTime;
-  bool isFavorite; // Это свойство "Избранное"
+  bool isFavorite;
 
-<<<<<<< HEAD
-  Task({required this.title, required this.description, this.dateTime, 
-=======
   Task({
     required this.title,
     required this.description,
     this.dateTime,
-    this.isFavorite = false, // Эта строка обозначает,что по умолчанию НЕ избранное (То есть становится по нажатию кнопки)
->>>>>>> 6a81fb845bab45cb7b8ec76cf768bb1db42d2db6
+    this.isFavorite = false,
   });
 }
 
@@ -45,6 +41,7 @@ class ONETaskAppState extends State<ONETaskApp> {
       'title': task.title,
       'description': task.description,
       'dateTime': task.dateTime?.toIso8601String(),
+      'isFavorite': task.isFavorite, // Сохраняем статус избранности
     })).toList();
     await prefs.setStringList('tasks', tasksJson);
   }
@@ -59,7 +56,10 @@ class ONETaskAppState extends State<ONETaskApp> {
           return Task(
             title: data['title'],
             description: data['description'],
-            dateTime: data['dateTime'] != null ? DateTime.parse(data['dateTime']) : null,
+            dateTime: data['dateTime'] != null
+                ? DateTime.parse(data['dateTime'])
+                : null,
+            isFavorite: data['isFavorite'] ?? false,
           );
         }).toList();
       });
@@ -70,7 +70,7 @@ class ONETaskAppState extends State<ONETaskApp> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.only(top: 40, left: 20, right: 20, bottom: 40),
+        padding: const EdgeInsets.only(top: 40, left: 20, right: 20, bottom: 40),
         child: Column(
           children: [
             Row(
@@ -81,10 +81,8 @@ class ONETaskAppState extends State<ONETaskApp> {
                     borderRadius: BorderRadius.circular(100),
                   ),
                   child: IconButton(
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => TWOSettingsClass()),
-                    ),
+                    onPressed: () =>
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => TWOSettingsClass())),
                     icon: Icon(CupertinoIcons.gear),
                   ),
                 ),
@@ -108,80 +106,43 @@ class ONETaskAppState extends State<ONETaskApp> {
                     margin: EdgeInsets.all(8),
                     child: Padding(
                       padding: EdgeInsets.all(8),
-<<<<<<< HEAD
-                      child:
-                          Column(crossAxisAlignment: CrossAxisAlignment.start, children:[
-                        Row(mainAxisAlignment : MainAxisAlignment.spaceBetween, children:[
-                          Expanded(child : Text(t.title)),
-                          Row(children:[
-                            IconButton(icon : Icon(Icons.edit),
-                              color: Color.fromARGB(255, 42, 155, 184),
-                              onPressed : ()=>_editTask(index)
-                            ),
-                            IconButton(icon : Icon(Icons.delete), 
-                              color: Color.fromARGB(255, 184, 42, 42),
-                              onPressed : ()=>_deleteTask(index)
-                            ),
-                          ]),
-                        ]),
-                        if(t.dateTime != null)
-                          Text(context.tr('Date ${t.dateTime!.toLocal().toString().substring(0,16)}')),
-                        SizedBox(height :8),
-                        Text(t.description),
-                      ]),
-                    ),
-                  );
-                }
-              ),
-            ),
-          ],
-        )
-      ),
-      floatingActionButton:
-        FloatingActionButton(onPressed:_addTask, child : Icon(Icons.add)),
-    );
-}
-
-void _addTask() async {
-  final newTask = await showAddTaskDialog(context);
-  if (newTask != null) {
-=======
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(child: Text(t.title)),
-                              Row(
-                                children: [
-                                  // Кнопка "Избранное"
-                                  IconButton(
-                                    icon: Icon(t.isFavorite ? Icons.star : Icons.star_border),
-                                    color: t.isFavorite ? Colors.yellow : null,
-                                    onPressed: () => _toggleFavorite(index),
-                                  ),
-                                  IconButton(
-                                    icon: Icon(Icons.edit),
-                                    color: Color.fromARGB(255, 42, 155, 184),
-                                    onPressed: () => _editTask(index),
-                                  ),
-                                  IconButton(
-                                    icon: Icon(Icons.delete),
-                                    color: Color.fromARGB(255, 184, 42, 42),
-                                    onPressed: () => _deleteTask(index),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          
-                          if (t.dateTime != null)
-                            Text(context.tr('Date ${t.dateTime!.toLocal().toString().substring(0, 16)}')),
-                          SizedBox(height: 8),
-                          Text(t.description),
-                        ],
-                      ),
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(child: Text(t.title)),
+                                Row(
+                                  children: [
+                                    IconButton(
+                                      icon: Icon(t.isFavorite
+                                          ? Icons.star
+                                          : Icons.star_border),
+                                      color: t.isFavorite
+                                          ? Colors.amber
+                                          : Colors.black,
+                                      onPressed: () => _toggleFavorite(index),
+                                    ),
+                                    IconButton(
+                                      icon: Icon(Icons.edit),
+                                      color: Color.fromARGB(255, 42, 155, 184),
+                                      onPressed: () => _editTask(index),
+                                    ),
+                                    IconButton(
+                                      icon: Icon(Icons.delete),
+                                      color: Color.fromARGB(255, 184, 42, 42),
+                                      onPressed: () => _deleteTask(index),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            if (t.dateTime != null)
+                              Text(context.tr('Date ${t.dateTime!.toLocal().toString().substring(0, 16)}')),
+                            SizedBox(height: 8),
+                            Text(t.description),
+                          ]),
                     ),
                   );
                 },
@@ -203,11 +164,13 @@ void _addTask() async {
       setState(() {
         tasks.add(newTask);
       });
+      await saveTasks();
     }
   }
 
-  void _deleteTask(int index) {
+  void _deleteTask(int index) async {
     setState(() => tasks.removeAt(index));
+    await saveTasks();
   }
 
   void _editTask(int index) async {
@@ -217,36 +180,15 @@ void _addTask() async {
       setState(() {
         tasks[index] = updatedTask;
       });
+      await saveTasks();
     }
   }
 
-  // Переключение "Избранности" (Тумблер)
-  void _toggleFavorite(int index) {
->>>>>>> 6a81fb845bab45cb7b8ec76cf768bb1db42d2db6
+  void _toggleFavorite(int index) async {
+    final task = tasks[index];
     setState(() {
-      tasks[index].isFavorite = !tasks[index].isFavorite;
+      task.isFavorite = !task.isFavorite;
     });
     await saveTasks();
   }
-<<<<<<< HEAD
 }
-
-void _deleteTask(int index) async {
-    setState(() => tasks.removeAt(index));
-    await saveTasks();
-}
-
-void _editTask(int index) async {
-  Task task = tasks[index];
-  final updatedTask = await showEditTaskDialog(context, task);
-  if (updatedTask != null) {
-    setState(() {
-      tasks[index] = updatedTask;
-    });
-    await saveTasks();
- }
-}
-}
-=======
-}
->>>>>>> 6a81fb845bab45cb7b8ec76cf768bb1db42d2db6
